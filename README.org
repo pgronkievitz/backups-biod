@@ -1,0 +1,108 @@
+#+TITLE: Strategie backupów
+#+SUBTITLE: Bezpieczeństwo i Ochrona Danych
+#+AUTHOR: Patryk Gronkiewicz 164157
+#+EMAIL: 164157@stud.prz.edu.pl
+#+LANGUAGE: pl
+#+OPTIONS: toc:nil H:2 num:t
+#+BEAMER_THEME: Hannover
+#+BEAMER_COLOR_THEME: orchid
+#+BEAMER_FONT_THEME: professionalfonts
+#+STARTUP: beamer
+#+LATEX_HEADER_EXTRA: \usepackage{soul}
+
+* Co backupować?
+:PROPERTIES:
+:CUSTOM_ID: co-backupowac
+:END:
+** Jakie rzeczy są warte backupu?
+Wg PCWorld[fn::~www.pcworld.com/article/525129/7_backup_strategies.html~] jest kilka kategorii, które szczególnie warto backupować. Są to m.in.:
+1. Dokumenty
+2. Ostatnie dokumenty (jeśli program nie wspiera kopii przyrostowych)
+3. Zdjęcia, filmy i inne media
+4. Pamiątki
+5. System
+* Czego się trzymać przy wybieraniu metody?
+** Prostota
+Backup powinien być *prosty* w użyciu - jeśli będzie wymagał nauki wielu rzeczy - nikomu nie będzie się chciało go robić.
+** Automatyzacja
+Bez automatyzacji bardzo szybko zaczniemy zapominać o zrobieniu backupu, a w ten sposób najszybciej stracimy dane - nie będzie /jeszcze/ ich kopii.
+** Przygotowany na tragedię
+Możemy mieć backup, ale nic nam po nim, jeżeli wszystkie wersje danych były w płonącym domu.
+* Jak wybrać nośnik danych?
+** Trwałość
+Nie chcemy, aby nasz backup przestał działać przez sam wiek. Może się coś takiego stać np. w przypadku starych dyskietek, jednak dyski też nie są w 100% bezpieczne pod tym względem.
+** Pojemność
+Z czasem nasz backup może się zrobić naprawdę duży - jeśli wybierzemy niezbyt pojemny nośnik - zajmie on bardzo dużo miejsca. Jeśli wybierzemy za duży - po uszkodzeniu nośnika stracimy zbyt wiele danych.
+** Prędkość
+Trzeba znaleźć złoty środek dla tych trzech wartości - taśmy magnetyczne są zarówno trwałe, jak i pojemne (a także przy ich uszkodzeniu tracimy tylko część danych), ale są bardzo wolne - dane mogłyby się zapisywać wolniej, niż dochodzą nowe.
+** Jakich nośników użyć?
+Dostępnych jest wiele rozwiązań - od tych przeznaczonych dla zwykłego ,,Kowalskiego'' po rozwiązania klasy Enterprise, które różnią się między sobą znacznie. Dla większości wystarczający byłby dodatkowy dysk ze skonfigurowaną chmurą, jednak firmy mogą wymagać więcej. Np. skonfigurowany serwer sieciowy, do którego automatycznie będą wysyłane dane, a do tego użycie centrum danych do ich przechowywania. W korporacjach często używane są taśmy magnetyczne (sic!), takie jak w kasetach VHS, jednak w dużo nowszej technologii.
+** Chmury, czyli pożycz pan \st{dysk} szpulę...
+Wiele z dostępnych rozwiązań chmurowych używa zwykłych dysków, jednak jesteśmy w stanie dużo niższym kosztem trzymać dane w miejscach takich jak S3 Deep Archive czy S3 Glacier. Jest to rozwiązanie oferowane przez Amazon Web Services, które bazuje na szpulach właśnie. Pozwalają one na przechowywanie dużych ilości danych niskim kosztem, ale mają jeden, znaczący minus - są bardzo wolne. Możemy wysyłać tam dane z niemal pełną prędkością, jednak ich odczyt jest bardzo długi (i kosztowny). Warto tam trzymac dane, które mają już kilka innych kopii, a nie boimy się już o ich utratę.
+* Rotacja nośników
+** Round robin
+Nośniki wymieniane są po kolei
+
+#+ATTR_LATEX: :width 5cm
+#+CAPTION: Schemat round robin dla trzech nośników
+[[./img/round_robin.png]]
+** Grandfather-Father-Son (GFS)
+Nośniki są podzielone na kategorie:
+1. Kopie dzienne (pon-czw) - Son
+2. Kopie tygodniowe (co piątek) - Father
+3. Kopie miesięczne - Grandfather
+Każdy z takich zestawów jest nadpisywany nowymi danymi po wystąpieniu ,,większego'' cyklu, tj. Kopie dzienne zaczynamy nadpisywać po zrobieniu kopii tygodniowej, a tygodniowe - po miesięcznej.
+** Tower of Hanoi
+Ten schemat rotacji nośników jest oparty na popularnym problemie programistycznym - wieżach Hanoi. W naszym wypadku dzielimy nośniki na pięć kategorii:
+1. A - Backupy co drugi dzień
+2. B - Backupy co czwarty dzień
+3. C - Backupy co ósmy dzień
+4. D i E - Backupy co szesnasty dzień.
+** Tower of Hanoi c.d.
+
+#+CAPTION: [[https://www.acronis.com/en-us/support/documentation/ABR10/index.html#1432.html][Acronis]]
+#+ATTR_LATEX: :width 5cm
+[[./img/hanoi.png]]
+* Typy kopii
+** Kopia pełna (full backup)
+Wszystkie pliki są kopiowane na nowy nośnik - zwykle jest to pierwsza iteracja kopii następnych. Jest kosztowna ze względu na użycie takiej samej ilości miejsca, jak dane oryginalne za każdym razem.
+| Plusy                | Minusy    |
+|----------------------+-----------|
+| Samowystarczalna     | Duża      |
+| Łatwa w przywróceniu | Kosztowna |
+** Kopia przyrostowa (incremental backup)
+Tylko pliki utworzone/zmienione od ostatniego backupu są kopiowane
+| Plusy  | Minusy                    |
+|--------+---------------------------|
+| Szybka | Wymaga poprzednich wersji |
+| Lekka  |                           |
+** Kopia różnicowa (differential backup)
+Podobnie jak w kopii przyrostowej - kopiowane są dane jedynie po zmianie, ale od ostatniego *pełnego* backupu.
+| Plusy        | Minusy                                     |
+|--------------+--------------------------------------------|
+| Szybka       | Wymaga pełnego backupu                     |
+| Średnia waga | Rośnie dużo szybciej od kopii przyrostowej |
+* 3-2-1... start!
+** Trzy...
+kopie danych - w razie równoległego problemu z dwoma nośnikami - zawsze pozostaje trzeci.
+** Dwa...
+różne nośniki - nie trzymanie wszystkich danych jedynie na np. dyskach HDD może spowodować, że przy jakimś incydencie stracimy wszystkie dane przy awarii dysków.
+** Jeden...
+backup powinien się znajdować w innym miejscu - w ten sposób jesteśmy zabezpieczeni przed sytuacjami losowymi takimi jak pożar czy powódź.
+
+A dlaczego z tych trzech tylko jeden w innej lokalizacji? Odpowiedź jest stosunkowo prosta - dużo szybciej odzyskamy dane lokalnie, niż pobierając je przez internet.
+** Start!
+Wszystkie podane wcześniej wartości są wartościami minimalnymi - w tym wypadku więcej znaczy lepiej.
+* Retencja
+** Po co mi te stare dane?
+Czasami zdarza się tak, że usuniemy coś, zakładając, że już więcej się nie przyda, a po jakimś czasie okazuje się, że była to ważna informacja - w takim momencie przydają się starsze dane.
+** Jak długo trzymać to wszystko?
+Zwykle wystarczą dane z ostatnich kilku dni, jednak często zaleca się, aby też trzymać informacje jeszcze starsze - przy trzymaniu codziennych wersji może się tego zrobić naprawdę dużo, ale jest kilka rozwiązań:
+1. Retencja - trzymamy dane z ostatnich 3 dni, ale z każdego tygodnia mamy już tylko podsumowanie. Analogicznie dla miesiąca - nie trzymamy tygodniowych backupów starszych niż tydzień, a jedynie ich miesięczne podsumowanie.
+2. Kopie przyrostowe - nie zapisujemy ponownie danych, które już mamy (chyba, że się zmieniły), a tylko te nowe.
+** Jak ustawić retencję?
+Nie ma złotego rozwiązania - każdy musi sobie odpowiedzieć jak długiej historii potrzebuje. W moim wypadku wygląda to tak:
+1. Kopie dzienne - zależnie od tego czy to kopia zdalna czy lokalna (tę drugą robię częściej) - trzymam wszystkie backupy z danego dnia
+2. Kopie tygodniowe - w danym tygodniu zapisuję tylko trzy dni
+3. Kopie miesięczne - dwanaście miesięcy ma swoje podsumowanie
+4. Kopie roczne - aż dziesięć lat wstecz - do tego momentu jeszcze nie dotarłem.
