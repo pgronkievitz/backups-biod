@@ -37,7 +37,7 @@ Z czasem nasz backup może się zrobić naprawdę duży - jeśli wybierzemy niez
 Trzeba znaleźć złoty środek dla tych trzech wartości - taśmy magnetyczne są zarówno trwałe, jak i pojemne (a także przy ich uszkodzeniu tracimy tylko część danych), ale są bardzo wolne - dane mogłyby się zapisywać wolniej, niż dochodzą nowe.
 ** Jakich nośników użyć?
 Dostępnych jest wiele rozwiązań - od tych przeznaczonych dla zwykłego ,,Kowalskiego'' po rozwiązania klasy Enterprise, które różnią się między sobą znacznie. Dla większości wystarczający byłby dodatkowy dysk ze skonfigurowaną chmurą, jednak firmy mogą wymagać więcej. Np. skonfigurowany serwer sieciowy, do którego automatycznie będą wysyłane dane, a do tego użycie centrum danych do ich przechowywania. W korporacjach często używane są taśmy magnetyczne (sic!), takie jak w kasetach VHS, jednak w dużo nowszej technologii.
-** Chmury, czyli pożycz pan \st{dysk} szpulę...
+** Chmury, czyli pożycz pan szpulę...
 Wiele z dostępnych rozwiązań chmurowych używa zwykłych dysków, jednak jesteśmy w stanie dużo niższym kosztem trzymać dane w miejscach takich jak S3 Deep Archive czy S3 Glacier. Jest to rozwiązanie oferowane przez Amazon Web Services, które bazuje na szpulach właśnie. Pozwalają one na przechowywanie dużych ilości danych niskim kosztem, ale mają jeden, znaczący minus - są bardzo wolne. Możemy wysyłać tam dane z niemal pełną prędkością, jednak ich odczyt jest bardzo długi (i kosztowny). Warto tam trzymac dane, które mają już kilka innych kopii, a nie boimy się już o ich utratę.
 * Rotacja nośników
 ** Round robin
@@ -106,3 +106,19 @@ Nie ma złotego rozwiązania - każdy musi sobie odpowiedzieć jak długiej hist
 2. Kopie tygodniowe - w danym tygodniu zapisuję tylko trzy dni
 3. Kopie miesięczne - dwanaście miesięcy ma swoje podsumowanie
 4. Kopie roczne - aż dziesięć lat wstecz - do tego momentu jeszcze nie dotarłem.
+* Ale jak to wszystko zastosować?
+** Poznajcie Zenka...
+Zenek jest studentem zarządzania. Aktualnie pisze swoją pracę licencjacką, której /bardzo nie chce stracić/. Od lat nie stracił żadnego dysku, aż tu nagle *chlup* - komputer zalany. W wielkiej panice Zenek próbuje jeszcze raz uruchomić komputer, jednak jedyne co w tym momencie słyszy to cichy trzask. Decyduje się oddać komputer do naprawy.
+** A w serwisie...
+Komputera nie udało się odratować. Serwisant pokazuje dysk Zenkowi - cały zalepiony, a w jednym miejscu czarny - to było spięcie. Nie ma czego ratować (albo jest to bardzo drogie). Zenek jest zdruzgotany i musi zacząć z pracą od nowa.
+** Co by było gdyby?
+Zenek przypomina sobie jednak o tym, że wykupił usługę kopii zapasowych. Jego Word automatycznie zapisuje pliki do chmury! Po sprawdzeniu OneDrive są trzy możliwości:
+1. Zenek nie stracił dosłownie nic związanego ze swoją pracą
+2. Zenek stracił tydzień pracy - coś się zawiesiło w aplikacji synchronizującej
+3. Zenek stracił wszystko - stwierdził, że ma za mało miejsca i tego pliku akurat tam nie potrzebuje i śmieszne zdjęcia piesków są ważniejsze.
+
+** Na pomoc przychodzi kopia zapasowa
+
+Zenek mógł być jednak zaradny i skonfigurować kopie zapasowe niezależne od OneDrive. Co w przypadku, jeśli faktycznie je ma?
+
+Może pobrać cały dysk na nowy, wgrać do nowego systemu stare pliki i wrócić do pracy - w najgorszym wypadku stracił kilka godzin pracy.
